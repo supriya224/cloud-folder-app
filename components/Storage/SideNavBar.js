@@ -1,11 +1,11 @@
 import Image from "next/image";
 import { AiOutlinePlusCircle } from "react-icons/ai";
-import Menu from "../data/menu";
+import Menu from "../../data/menu";
 import { useState } from "react";
+import CreateFolderModel from "../Folder/CreateFolderModel";
 
 function SideNavBar() {
-
-    const[activeIndex, setActiveIndex] =useState(0)
+  const [activeIndex, setActiveIndex] = useState(0);
   return (
     <div className="w-[200px] bg-white h-screen sticky top-0 z-10 shadow-blue-300 shadow-md p-5">
       <div>
@@ -21,17 +21,21 @@ function SideNavBar() {
         Add New File <AiOutlinePlusCircle className="w-6 h-6" />
       </button>
 
-      <button className="flex pt-3 gap-2 items-center text-[13px] bg-sky-400 w-full p-2 justify-center text-white rounded-md px-3 hover:scale-105 transition-all mt-1">
-        New Folder <AiOutlinePlusCircle className="w-6 h-6" />
+      <button className="flex pt-3 gap-2 items-center text-[13px] bg-sky-400 w-full p-2 justify-center text-white rounded-md px-3 hover:scale-105 transition-all mt-1"  onClick={() => document.getElementById("my_modal_3").showModal()}>
+        Create Folder <AiOutlinePlusCircle className="w-6 h-6" />
       </button>
 
       <div className="mt-7">
-        {Menu?.list?.map((item,index) => (
+        {Menu?.list?.map((item, index) => (
           <h2
-            onClick={()=>setActiveIndex(index)}
+            onClick={() => setActiveIndex(index)}
             className={`flex gap-2 items-center
             p-2 mt-3 text-gray-500 rounded-md cursor-pointer
-            hover:bg-blue-500 hover:text-white ${activeIndex==index?'hover:bg-blue-500 hover:text-white':'null'}`}
+            hover:bg-blue-500 hover:text-white ${
+              activeIndex == index
+                ? "hover:bg-blue-500 hover:text-white"
+                : "null"
+            }`}
           >
             <svg
               xmlns="http://www.w3.org/2000/svg"
@@ -47,19 +51,15 @@ function SideNavBar() {
                 d={item.logo}
               />
             </svg>
-            
-          
+
             {item.name}
           </h2>
         ))}
       </div>
-      {/* <dialog id="my_modal_3" className="modal">
-            <CreateFolderModal/>
-        </dialog>
-        <dialog id="upload_file" className="modal">
-            <UploadFileModal 
-            closeModal={()=>window.upload_file.close()}/>
-        </dialog> */}
+
+      <dialog id="my_modal_3" className="modal">
+        <CreateFolderModel />
+      </dialog>
     </div>
   );
 }

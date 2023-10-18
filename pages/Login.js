@@ -22,9 +22,7 @@ function Login() {
  
         <button 
         className='text-white p-2 rounded-xl px-3 left-3 bg-blue-400'
-        onClick={()=>signIn()}>Login with Google
-           
-            </button>
+        onClick={()=>signIn()}>Login with Google</button>
     </div>
   )
 }
