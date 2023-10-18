@@ -1,56 +1,68 @@
-import React, { useState } from "react";
+// import moment from "moment";
+import { getFirestore } from "firebase/firestore";
+// import moment from "moment/moment";
 import Image from "next/image";
-import {app} from '../../config/FirebaseConfig'
-import {doc, setDoc, getFirestore} from 'firebase/firestore'
-import { useSession } from "next-auth/react";
+import React, { useContext, useState } from "react";
+import { app } from "@/config/FirebaseConfig";
+import { ShowToastContext } from "../../context/ShowToastContext";
 
-function CreateFolderModel() {
-  const docId=Date.now().toString()
-    const [folderName, setFolderName]=useState()
-    const {data:session} =useSession();
+function FileItem({ file }) {
+  const db = getFirestore(app);
+  // const image = "/" + file.type + ".png";  
 
-    const db= getFirestore(app)
-    const onCreate=async()=>{
-        console.log(folderName)
-        await setDoc(doc(db, "Folders", Date.now().toString()),{
-          name:folderName,
-          id:docId,
-          createdBy:session.user.email
-        })
-    }
+  const { showToastMsg, setShowToastMsg } = useContext(ShowToastContext);
 
-
+  // const deleteFile = async (file) => {
+  //   await deleteDoc(doc(db, "files", file.toString())).then((resp) => {
+  //     setShowToastMsg("File Deleted!!!");
+  //   });
+  // };
 
   return (
-    <div>
-      <form method="dialog" className="modal-box bg-white">
-        {/* if there is a button in form, it will close the modal */}
-        <button className="btn btn-sm btn-circle btn-ghost absolute right-2 top-2">
-          ✕
-        </button>
-        {/* <div className="">
-          <h3 className="font-bold text-lg ">Hello!</h3>
-          <p className="py-4">Press ESC key or click on ✕ button to close</p>
-        </div> */}
-        <div className="w-full items-center  bg-white  
-        flex flex-col justify-center gap-3">
-          <Image src="/folder.png" alt="folder" width={50} height={50} />
-          <input
-            type="text"
-            placeholder="Folder Name"
-            className="p-2 border-[1px] outline-none bg-white 
-                rounded-md"
-                onChange={(e)=>setFolderName(e.target.value)}
-          />
-          <button className="bg-blue-500
-          text-white rounded-md p-2 px-3 w-full"
-          onClick={()=>onCreate()}
-          >Create</button>
-        </div>
-      </form>
+    <div
+      className="grid grid-cols-1
+    md:grid-cols-2 justify-between
+    cursor-pointer hover:bg-gray-100
+    p-3 rounded-md"
+    >
+      <div className="flex gap-2 items-center">
+        <Image src="/folder.png" alt="file-icon" width={26} height={20} on />
+        <h2
+          className="text-[15px] truncate"
+          onClick={() => window.open(file.imageUrl)}
+        >
+         
+        </h2>
+      </div>
+      <div className="grid grid-cols-3 place-content-start">
+        <h2 className="text-[15px]">
+          {/* {moment(file.modifiedAt).format("MMMM DD, YYYY")} */}
+          {/* {moment(file.modifiedAt).format("MMMM DD, YYYY")} */}
+        </h2>
+
+        <h2 className="text-[15px]">
+          {/* {(file.size / 1024 ** 2).toFixed(2) + " MB"} */}
+          {/* {(file.size / 1024 ** 2).toFixed(2) + " MB"} */}
+          <svg
+            xmlns="http://www.w3.org/2000/svg"
+            onClick={() => deleteFile(file)}
+            fill="none"
+            viewBox="0 0 24 24"
+            strokeWidth={1.5}
+            stroke="currentColor"
+            className="w-5 h-5 float-right text-red-500
+           hover:scale-110 transition-all"
+          >
+            <path
+              strokeLinecap="round"
+              strokeLinejoin="round"
+              d="M14.74 9l-.346 9m-4.788 0L9.26 9m9.968-3.21c.342.052.682.107 1.022.166m-1.022-.165L18.16 19.673a2.25 2.25 0 01-2.244 2.077H8.084a2.25 2.25 0 01-2.244-2.077L4.772 5.79m14.456 0a48.108 48.108 0 00-3.478-.397m-12 .562c.34-.059.68-.114 1.022-.165m0 0a48.11 48.11 0 013.478-.397m7.5 0v-.916c0-1.18-.91-2.164-2.09-2.201a51.964 51.964 0 00-3.32 0c-1.18.037-2.09 1.022-2.09 2.201v.916m7.5 0a48.667 48.667 0 00-7.5 0"
+            />
+          </svg>
+        </h2>
+      </div>
     </div>
   );
 }
 
-
-export default CreateFolderModel;
+export default FileItem;
